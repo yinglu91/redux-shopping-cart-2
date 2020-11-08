@@ -1,52 +1,55 @@
-import React, { useEffect } from "react"
-import { useSelector, useDispatch} from 'react-redux'
-import { clearCart, getTotals } from '../actions/cart'
-import CartItem from "./CartItem";
+import React from 'react'
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
+import { getTotalItems, getTotal, getCartProducts } from '../reducers'
+import { checkout } from '../actions'
+import CartItem from './CartItem'
 
-const Cart = () => {
+const Cart  = () => {
+  const history = useHistory()
   const dispatch = useDispatch()
-  const {cart, total} = useSelector(state => state.shoppingCart)
 
-  useEffect(() => {
-    dispatch(getTotals())
-  }, [cart, dispatch])
-
-  if (cart.length === 0) {
-    return (
-      <section className="cart">
-        {/* cart header */}
-        <header>
-          <h2>your bag</h2>
-          <h4 className="empty-cart">is currently empty</h4>
-        </header>
-      </section>
-    );
-  }
+  const products = useSelector(state => getCartProducts(state))
+  const total = useSelector(state => getTotal(state))
+  const totalItems = useSelector(state => getTotalItems(state))
 
   return (
     <section className="cart">
-      {/* cart header */}
       <header>
-        <h2>your bag</h2>
+        <h2>your cart</h2>
       </header>
-      {/* cart items */}
+     
       <article>
-        {cart.map(item => {
-          return <CartItem key={item.id} {...item} />;
-        })}
+        {products.length == 0 && <em>Please add some products to cart.</em>}
+
+        {products.length > 0 && products.map(item => {
+            return <CartItem key={item.id} {...item} />;
+          })}
       </article>
-      {/* cart footer */}
+     
       <footer>
         <hr />
         <div className="cart-total">
           <h4>
-            total <span>${total}</span>
+          Total Price <span>&#36;{total}</span>
           </h4>
         </div>
-        <button className="btn clear-btn" onClick={() => dispatch(clearCart())}>clear cart</button>
+
+        <button className="btn clear-btn" onClick={() => history.push('/products')}
+          >Continue Shopping</button> {'  '}
+
+        <button className="btn clear-btn" onClick={() => dispatch(checkout())}
+          disabled={totalItems > 0 ? '' : 'disabled'}
+          title={totalItems > 0 ? 'Check Out' : 'disabled'}>check out</button>
+
       </footer>
     </section>
-  );
-};
+  )
+}
 
 export default Cart
+
+{/* <button onClick={() => dispatch(checkout(products))}
+        disabled={hasProducts ? '' : 'disabled'}>
+        Checkout
+      </button> */}

@@ -3,7 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+// redux stuff
+import { Provider } from 'react-redux'
+import store from './store'
 
-// https://www.youtube.com/watch?v=731Ur2HGRBY&t=1256s
+ReactDOM.render(  
+  <Provider store={store}>
+    <App />
+  </Provider>, document.getElementById("root")
+);
+
+// https://github.com/reduxjs/redux/tree/master/examples/shopping-cart/src
 

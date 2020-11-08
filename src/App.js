@@ -1,20 +1,23 @@
 import React from "react";
-// components
-import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Navbar from './components/layout/Navbar';
+import Landing from './components/layout/Landing';
+import Products from './components/Products'
 import Cart from "./components/Cart";
 
-// redux stuff
-import { Provider } from 'react-redux'
-import store from './store'
-
 function App() {
-  // cart setup
-
   return (
-    <Provider store={store}>
+    <Router>
       <Navbar />
-      <Cart />
-    </Provider>
+      <Route exact path="/" component={Landing} />
+
+      <section className="container">
+        <Switch>
+          <Route exact path="/products" component={Products} />
+          <Route exact path="/cart" component={Cart} />
+        </Switch>
+      </section>
+    </Router>
   );
 }
 

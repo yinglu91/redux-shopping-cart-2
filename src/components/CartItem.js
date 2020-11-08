@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from 'react-redux'
-import { increase, decrease, remove } from '../actions/cart'
+import { decrease, remove } from '../actions'
+import { addToCart } from '../actions'
 
 // {
 //   id: 1,
@@ -11,7 +12,7 @@ import { increase, decrease, remove } from '../actions/cart'
 //   amount: 1
 // }
 
-const CartItem = ({ id, title, price, img, amount }) => {
+const CartItem = ({ id, title, img, inventory, price, quantity }) => {
   const dispatch = useDispatch()
 
   return (
@@ -22,19 +23,22 @@ const CartItem = ({ id, title, price, img, amount }) => {
         <h4>{title}</h4>
         <h4 className="item-price">${price}</h4>
         {/* remove button */}
-        <button className="remove-btn" onClick={() => dispatch(remove(id))}>remove</button>
+        <button className="remove-btn" onClick={() => dispatch(remove(id, quantity))}>remove</button>
       </div>
 
       <div>
-        <button className="amount-btn" onClick={() => dispatch(increase(id))}>
+        <button className="amount-btn" 
+            onClick={() => dispatch(addToCart(id))}
+            title={inventory > 0 ? 'Add one more to cart' : 'sold out'}
+            disabled={inventory > 0 ? '' : 'disabled'}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
             <path d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z" />
           </svg>
         </button>
 
-        <p className="amount">{amount}</p>
+        <p className="amount">{quantity}</p>
 
-        <button className="amount-btn" onClick={() => dispatch(decrease(id, amount))}>
+        <button className="amount-btn" onClick={() => dispatch(decrease(id, quantity))}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
             <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
           </svg>
