@@ -1,5 +1,5 @@
 import shop from '../api/shop'
-import * as types from './type'
+import * as types from './types'
 
 const receiveProducts = products => ({
   type: types.RECEIVE_PRODUCTS,
